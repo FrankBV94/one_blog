@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import Logo from '../imgs/logo_white.png'
+import Logo from '../assets/imgs/logo_white.png'
 import { Link, Outlet } from 'react-router-dom'
 import { TbSearch, TbMenu2, TbEdit, TbMoonStars, TbSun } from 'react-icons/tb'
-import useTheme from '../hooks/useTheme'
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(true)
   const [showSearchInput, setShowSearchInput] = useState(true)
-  const { darkMode, setDarkMode } = useTheme()
 
   const toggleMenu = () => {
     setShowMenu(prev => !prev)
