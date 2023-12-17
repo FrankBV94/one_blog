@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import PropTypes from 'prop-types'
 
-const PageTransitionAnimationWrapper =
+const AnimationWrapper =
   ({
     children,
     keyValue,
@@ -24,7 +24,7 @@ const PageTransitionAnimationWrapper =
     )
   }
 
-PageTransitionAnimationWrapper.propTypes = {
+AnimationWrapper.propTypes = {
   children: PropTypes.object,
   keyValue: PropTypes.string,
   initial: PropTypes.object,
@@ -33,4 +33,4 @@ PageTransitionAnimationWrapper.propTypes = {
   className: PropTypes.string
 }
 
-export default PageTransitionAnimationWrapper
+export default AnimationWrapper

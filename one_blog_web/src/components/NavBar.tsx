@@ -1,80 +1,274 @@
-import { useState } from 'react'
-import Logo from '../assets/imgs/logo_white.png'
+import Black_Logo from '../assets/imgs/logo_white.png'
+import White_Logo from '../assets/imgs/logo_dark.png'
 import { Link, Outlet } from 'react-router-dom'
-import { TbSearch, TbMenu2, TbEdit, TbMoonStars, TbSun } from 'react-icons/tb'
+import { TbSearch, TbBellFilled, TbBallpenFilled, TbUserFilled, TbSettingsFilled, TbLogout2, TbMoonStars, TbSun } from 'react-icons/tb'
+import { useThemeStore } from '../store/theme'
+import { useClick, useFloating, useInteractions, useDismiss, offset } from '@floating-ui/react'
+import { useState } from 'react'
+import AnimationWrapper from '../common/AnimationWrapper'
 
 const Navbar = () => {
-  const [showMenu, setShowMenu] = useState(true)
-  const [showSearchInput, setShowSearchInput] = useState(true)
+  /** Theme Controller */
+  const { theme, toggleTheme } = useThemeStore()
+  /** User Menu Controller */
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const {
+    refs: MenuRefs,
+    floatingStyles: MenuFloatingStyles,
+    context: MenuContext
+  } = useFloating({
+    placement: 'bottom-end',
+    open: isOpenMenu,
+    onOpenChange: setIsOpenMenu
+  })
+  const menuClick = useClick(MenuContext)
+  const menuDismiss = useDismiss(MenuContext)
+  const {
+    getReferenceProps: MenuGetReferenceProps,
+    getFloatingProps: MenuGetFloatingProps
+  } = useInteractions([
+    menuClick,
+    menuDismiss
+  ])
+  /** Notifications Menu Controller */
+  const [isOpenNotifications, setIsOpenNotifications] = useState(false)
+  const {
+    refs: NotificationsRefs,
+    floatingStyles: NotificationsFloatingStyles,
+    context: NotificationsContext
+  } = useFloating({
+    middleware: [offset({
+      crossAxis: -50
+    })],
+    strategy: 'fixed',
+    open: isOpenNotifications,
+    onOpenChange: setIsOpenNotifications
+  })
+  const notificationsClick = useClick(NotificationsContext)
+  const notificationsDismiss = useDismiss(NotificationsContext)
+  const {
+    getReferenceProps: NotificationsGetReferenceProps,
+    getFloatingProps: NotificationsGetFloatingProps
+  } = useInteractions([
+    notificationsClick,
+    notificationsDismiss
+  ])
 
-  const toggleMenu = () => {
-    setShowMenu(prev => !prev)
-  }
-
-  const toggleSearchInput = () => {
-    setShowSearchInput(prev => !prev)
-  }
+  /** User Menu Controller */
+  const [isOpenSearch, setIsOpenSearch] = useState(false)
+  const {
+    refs: SearchRefs,
+    floatingStyles: SearchFloatingStyles,
+    context: SearchContext
+  } = useFloating({
+    placement: 'bottom-end',
+    open: isOpenSearch,
+    onOpenChange: setIsOpenSearch
+  })
+  const searchClick = useClick(SearchContext)
+  const searchDismiss = useDismiss(SearchContext)
+  const {
+    getReferenceProps: SearchGetReferenceProps,
+    getFloatingProps: SearchGetFloatingProps
+  } = useInteractions([
+    searchClick,
+    searchDismiss
+  ])
 
   return (
-    <>
-      <nav className="bg-white border-b-2 border-neutral-200 dark:bg-neutral-900">
-        <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link
-            to="/"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-          >
-            <img
-              src={Logo}
-              className="h-10"
-              alt="Flowbite Logo"
-            />
-            <div className="relative hidden md:block">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <TbSearch className='w-5 h-5 text-neutral-500 dark:text-neutral-400' />
-                <span className="sr-only">Buscar icon</span>
+    <header className="antialiased">
+      <nav className="bg-white border-neutral-200 px-4 lg:px-10 py-2.5 dark:bg-neutral-800">
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="flex justify-start items-center">
+            <Link to="home" className="flex mr-4">
+              <img src={theme === 'dark' ? White_Logo : Black_Logo} className="mr-3 h-8" alt="One Blog Logo" />
+            </Link>
+            <form action="#" method="GET" className="hidden lg:block lg:pl-2">
+              <label htmlFor="topbar-search" className="sr-only">Buscar</label>
+              <div className="relative mt-1 lg:w-96">
+                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                  <TbSearch className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                </div>
+                <input
+                  type="text"
+                  name="email"
+                  id="topbar-search"
+                  className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar" />
               </div>
-              <input type="text" id="search-navbar" className="block w-full p-2 ps-10  text-neutral-900 border border-neutral-300 rounded-full bg-neutral-50 focus:ring-rose-500 focus:border-rose-500 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar..." />
-            </div>
-          </Link>
-          <div className="flex md:hidden md:order-2">
-            <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" className="md:hidden text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus:ring-4 focus:ring-neutral-200 dark:focus:ring-neutral-700 rounded-lg  p-2.5 me-1" onClick={() => toggleSearchInput()}>
-              <TbSearch className='w-5 h-5' />
-              <span className="sr-only">Buscar</span>
-            </button>
-            <button data-collapse-toggle="navbar-search" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center  text-neutral-500 rounded-full md:hidden hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600" aria-controls="navbar-search" aria-expanded="false" onClick={() => toggleMenu()}>
-              <span className="sr-only">Open main menu</span>
-              <TbMenu2 className='w-5 h-5' />
-            </button>
+            </form>
           </div>
-          <div className={showMenu || showSearchInput ? 'items-center justify-between w-full md:flex md:w-auto md:order-1' : 'hidden'} id="navbar-search">
-            <div className="relative mt-3 md:hidden">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <TbSearch className='w-4 h-4 text-neutral-500 dark:text-neutral-400' />
-              </div>
-              <input type="text" id="search-navbar" className="block w-full p-2 ps-10  text-neutral-900 border border-neutral-300 rounded-lg bg-neutral-50 focus:ring-rose-500 focus:border-rose-500 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar..." />
-            </div>
-            <ul className={showMenu ? 'flex flex-col p-4 md:p-0 mt-4 font-medium border items-center border-neutral-100 rounded-lg bg-neutral-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-neutral-800 md:dark:bg-neutral-900 dark:border-neutral-700 gap-4' : 'hidden'}>
-              <li>
-                <Link to="#" className="block py-2 px-3 text-neutral-900 rounded md:bg-transparent md:p-0 dark:text-white">
-                  Escribir
-                </Link>
-              </li>
-              <li>
-                <Link to="/signin" className="block py-2 px-3 text-neutral-900 rounded md:bg-transparent md:p-0 dark:text-white">
-                  Iniciar sesión
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="block py-2 px-3 text-neutral-900 rounded-full md:text-white md:bg-neutral-900 dark:text-white">
-                  Crear cuenta
-                </Link>
-              </li>
-            </ul>
+          <div className="flex items-center lg:order-2">
+            <Link to="/editor" className="hidden sm:inline-flex items-center justify-center text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none dark:focus:ring-rose-800">
+              <TbBallpenFilled className="mr-1 -ml-1 w-5 h-5" />
+              Escribir
+            </Link>
+            {/* Search Button */}
+            <button
+              id="toggleSidebarMobileSearch"
+              type="button"
+              className="p-2 text-neutral-500 rounded-lg lg:hidden hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-white"
+              ref={SearchRefs.setReference} {...SearchGetReferenceProps()}>
+              <span className="sr-only">Buscar</span>
+              {/* <!-- Search icon --> */}
+              <TbSearch className="w-4 h-4" />
+            </button>
+            {/* Search Dropdown */}
+            {isOpenSearch && (
+              <AnimationWrapper transition={{ duration: 0.2 }}>
+                <div
+                  ref={SearchRefs.setFloating}
+                  style={SearchFloatingStyles}
+                  {...SearchGetFloatingProps()}
+                >
+                  <div className="overflow-hidden z-50 my-4 w-64 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="notification-dropdown">
+                    <form action="#" method="GET" className="lg:block lg:pl-2">
+                      <label htmlFor="topbar-search" className="sr-only">Buscar</label>
+                      <div className="relative mt-1 lg:w-96">
+                        <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                          <TbSearch className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                        </div>
+                        <input
+                          type="text"
+                          name="email"
+                          id="topbar-search"
+                          className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar" />
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </AnimationWrapper>
+            )}
+            {/* Notifications Button */}
+            <button
+              type="button"
+              data-dropdown-toggle="notification-dropdown"
+              className="p-2 mr-1 text-neutral-500 rounded-lg hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 focus:ring-4 focus:ring-neutral-300 dark:focus:ring-neutral-600"
+              ref={NotificationsRefs.setReference} {...NotificationsGetReferenceProps()}>
+              <span className="sr-only">Ver notificaciones</span>
+              {/* <!-- Bell icon --> */}
+              <TbBellFilled className="w-5 h-5" />
+            </button>
+            {/* <!-- Dropdown menu --> */}
+            {isOpenNotifications && (
+              <AnimationWrapper transition={{ duration: 0.2 }}>
+                <div
+                  ref={NotificationsRefs.setFloating}
+                  style={NotificationsFloatingStyles}
+                  {...NotificationsGetFloatingProps()}
+                >
+                  <div className="overflow-hidden z-50 my-4 w-64 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="notification-dropdown">
+                    <div className="block py-2 px-4 text-base font-medium text-center text-neutral-700 bg-neutral-50 dark:bg-neutral-700 dark:text-neutral-400">
+                      Notificaciones
+                    </div>
+                    <div>
+                      <Link to="#" className="flex py-3 px-4 border-b hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:border-neutral-600">
+                        <div className="flex-shrink-0">
+                          <img className="w-11 h-11 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="Jese Leos avatar" />
+                          <div className="flex absolute justify-center items-center ml-6 -mt-5 w-5 h-5 bg-neutral-900 rounded-full border border-white dark:border-neutral-700">
+                            <svg className="w-2 h-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18"><path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-2V5a1 1 0 0 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 0 0 2 0V9h2a1 1 0 1 0 0-2Z" /></svg>
+                          </div>
+                        </div>
+                        <div className="pl-3 w-full">
+                          <div className="text-neutral-500 font-normal text-sm mb-1.5 dark:text-neutral-400"><span className="font-semibold text-neutral-900 dark:text-white">Jese leos</span> and <span className="font-medium text-neutral-900 dark:text-white">5 others</span> started following you.</div>
+                          <div className="text-xs font-medium text-rose-700 dark:text-rose-400">10 minutes ago</div>
+                        </div>
+                      </Link>
+                    </div>
+                    <a href="#" className="block py-2 text-base font-medium text-center text-neutral-900 bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-700 dark:text-white dark:hover:underline">
+                      <div className="inline-flex items-center ">
+                        <svg aria-hidden="true" className="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"></path></svg>
+                        View all
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </AnimationWrapper>
+            )}
+            {/* <!-- User Menu --> */}
+            <button
+              type="button"
+              className="flex mx-3 text-sm bg-neutral-800 rounded-full md:mr-0 focus:ring-4 focus:ring-neutral-300 dark:focus:ring-neutral-600"
+              id="user-menu-button"
+              aria-expanded="false"
+              data-dropdown-toggle="dropdown"
+              ref={MenuRefs.setReference} {...MenuGetReferenceProps()}>
+              <span className="sr-only">Abrir menú de usuario</span>
+              <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+            </button>
+            {/* <!-- Dropdown menu --> */}
+            {isOpenMenu && (
+              <AnimationWrapper transition={{ duration: 0.2 }}>
+                <div
+                  ref={MenuRefs.setFloating}
+                  style={MenuFloatingStyles}
+                  {...MenuGetFloatingProps()}
+                >
+                  <div
+                    className="z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-neutral-100 shadow dark:bg-neutral-700 dark:divide-neutral-600"
+                    id="dropdown">
+                    <ul
+                      className="py-1 text-neutral-500 dark:text-neutral-400"
+                      aria-labelledby="dropdown">
+                      <li className='md:hidden'>
+                        <Link
+                          to="/editor"
+                          className="flex items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          <TbBallpenFilled className="mr-2 w-4 h-4 text-neutral-400" />
+                          Escribir
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          className="flex w-full items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white"
+                          onClick={toggleTheme}>
+                          {
+                            theme === 'dark'
+                              ? <TbMoonStars className="mr-2 w-4 h-4 text-neutral-400" />
+                              : <TbSun className="mr-2 w-4 h-4 text-neutral-400" />
+                          }
+                          Cambiar tema
+                        </button>
+                      </li>
+                    </ul>
+                    <ul
+                      className="py-1 text-neutral-500 dark:text-neutral-400"
+                      aria-labelledby="dropdown">
+                      <li>
+                        <Link
+                          to={`/user/${username}`}
+                          className="flex items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          <TbUserFilled className="mr-2 w-4 h-4 text-neutral-400" />
+                          Perfil
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/settings"
+                          className="flex items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          <TbSettingsFilled className="mr-2 w-4 h-4 text-neutral-400" />
+                          Ajustes
+                        </Link>
+                      </li>
+                    </ul>
+                    <ul
+                      className="py-1 text-neutral-500 dark:text-neutral-400"
+                      aria-labelledby="dropdown">
+                      <li>
+                        <button
+                          className="flex items-center w-full py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          <TbLogout2 className="mr-2 w-4 h-4 text-neutral-400" />
+                          Salir
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </AnimationWrapper>
+            )}
           </div>
         </div>
       </nav>
-      <Outlet />
-    </>
+    </header>
   )
 }
 
