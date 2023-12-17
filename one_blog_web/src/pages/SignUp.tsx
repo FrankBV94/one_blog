@@ -1,45 +1,63 @@
 import { useState } from 'react'
-import Input from '../components/Input'
-import { Link } from 'react-router-dom'
-import { TbBrandGoogleFilled, TbBrandApple } from 'react-icons/tb'
-import PageTransitionAnimationWrapper from '../common/PageTransitionAnimationWrapper'
+import { Link, useNavigate } from 'react-router-dom'
+import AnimationWrapper from '../common/AnimationWrapper'
+import { TbBrandGoogleFilled, TbBrandApple, TbEye, TbEyeOff } from 'react-icons/tb'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { type Inputs } from '../utils/types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SignupValidation } from '../utils/validations'
+import type * as z from 'zod'
+import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { useCreateUserAccount, useSignInAccount } from '../utils/queries'
+import { useUserContext } from '../context/AuthContext'
+import Loader from '../common/Loader'
 
 const SignUp = () => {
-  const [acceptTerms, setAcceptTerms] = useState(false)
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>({ resolver: zodResolver(SignupValidation) })
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [acceptTermsAndConditions, setAcceptTermsAndConditions] = useState(false)
+  const navigate = useNavigate()
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount()
+  const { mutateAsync: signInAccount, isPending: isSigningUser } = useSignInAccount()
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext()
 
-  const handleSignup = (e) => {
-    e.preventDefault()
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState)
+  }
 
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ // regex for email
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/ // regex for password
+  const onSubmit: SubmitHandler<Inputs> = async (user: z.infer<typeof SignupValidation>) => {
+    try {
+      const newUser = await createUserAccount(user)
 
-    // obtener el formulario
-    const form = new FormData(e.target)
-    const formData = {}
+      if ('message' in newUser) {
+        return toast.error('Ya existe un usuario con el mismo correo electrónico.')
+      }
 
-    // obtener los datos del formulario
-    for (const [key, value] of form.entries()) {
-      formData[key] = value
+      if (newUser.lenght === 0) {
+        return toast.error('Registro fallido. Inténtalo de nuevo.')
+      }
+
+      const session = await signInAccount({ email: user.email, password: user.password })
+      if (session?.$id === null) {
+        return toast.error('Algo salió mal. Por favor inicie sesión en su nueva cuenta.')
+      }
+
+      const isLoggedIn = await checkAuthUser()
+
+      if (isLoggedIn) {
+        reset()
+        navigate('/home')
+      } else {
+        return toast.error('Fallo al iniciar sesion. Inténtalo de nuevo.')
+      }
+    } catch (error) {
+      console.log(error)
     }
-
-    const { name, email, password } = formData
-
-    // validacion de los datos
-    if (name.length < 3) {
-      toast.error('El nombre debe tener al menos más de 3 letras.')
-    }
-    if (!email || !emailRegex.test(email)) {
-      toast.error('El correo electrónico es invalido.')
-    }
-    if (!passwordRegex.test(password)) {
-      toast.error('La contraseña debe contener 6 u 8 caracteres, un carácter numérico, una letra minúscula y una mayúscula.')
-    }
-    e.target.reset()
   }
 
   return (
-    <PageTransitionAnimationWrapper keyValue='signup'>
+    <AnimationWrapper keyValue='signup'>
       <section
         className="bg-neutral-50 dark:bg-neutral-900">
         <div
@@ -63,27 +81,104 @@ const SignUp = () => {
                 </button>
               </div>
               <div className="inline-flex items-center justify-center w-full">
-                <hr className="w-64 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-                <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">o</span>
+                <hr className="w-96 h-px bg-neutral-200 border-0 dark:bg-neutral-700" />
+                <span className="absolute px-3 font-medium text-neutral-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-neutral-900">o</span>
               </div>
               <form
                 className="space-y-4 md:space-y-6"
-                onSubmit={handleSignup}>
-                <Input
-                  label='Nombre'
-                  name='name'
-                  type='text'
-                  placeholder='Jhon Doe' />
-                <Input
-                  label='Correo'
-                  name='email'
-                  type='email'
-                  placeholder='jhon.doe@gmail.com' />
-                <Input
-                  label='Contraseña'
-                  name='password'
-                  type='password'
-                  placeholder='••••••••' />
+                onSubmit={handleSubmit(onSubmit)}>
+                {/* FIELD NAME */}
+                <div>
+                  <label
+                    htmlFor='name'
+                    className="block mb-2 text-sm font-medium text-neutral-900 dark:text-white">
+                    Nombre
+                  </label>
+                  <div>
+                    <input
+                      type='text'
+                      id='name'
+                      placeholder='Jhon Doe'
+                      {...register('name')}
+                      className={`border  sm:text-sm rounded-lg block w-full p-2.5 
+                      ${(errors.name != null)
+                          ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                  </div>
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                    {errors.name?.message}
+                  </p>
+                </div>
+                {/* FIELD USERNAME */}
+                <div>
+                  <label
+                    htmlFor='username'
+                    className="block mb-2 text-sm font-medium text-neutral-900 dark:text-white">
+                    Usuario
+                  </label>
+                  <div>
+                    <input
+                      type='text'
+                      id='username'
+                      placeholder='jhondoe'
+                      {...register('username')}
+                      className={`border  sm:text-sm rounded-lg block w-full p-2.5 
+                      ${(errors.username != null)
+                          ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                  </div>
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                    {errors.username?.message}
+                  </p>
+                </div>
+                {/* FIELD EMAIL */}
+                <div>
+                  <label
+                    htmlFor='email'
+                    className="block mb-2 text-sm font-medium text-neutral-900 dark:text-white">
+                    Correo
+                  </label>
+                  <div>
+                    <input
+                      type='email'
+                      id='email'
+                      placeholder='jhon.doe@gmail.com'
+                      {...register('email')}
+                      className={`border  sm:text-sm rounded-lg block w-full p-2.5 
+                      ${(errors.email != null)
+                          ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                  </div>
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                    {errors.email?.message}
+                  </p>
+                </div>
+                {/* FIELD PASSWORD */}
+                <div>
+                  <label
+                    htmlFor='password'
+                    className="block mb-2 text-sm font-medium text-neutral-900 dark:text-white">
+                    Contraseña
+                  </label>
+                  <div className='relative'>
+                    <input
+                      type={passwordVisible ? 'text' : 'password'}
+                      id='password'
+                      placeholder='••••••••'
+                      {...register('password')}
+                      className={`border  sm:text-sm rounded-lg block w-full p-2.5 
+                      ${(errors.password != null)
+                          ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                    {passwordVisible
+                      ? (<TbEye className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
+                      : (<TbEyeOff className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
+                    }
+                  </div>
+                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                    {errors.password?.message}
+                  </p>
+                </div>
                 <div
                   className="flex items-start">
                   <div
@@ -92,9 +187,10 @@ const SignUp = () => {
                       id="terms"
                       aria-describedby="terms"
                       type="checkbox"
-                      className="w-4 h-4 border border-neutral-300 rounded bg-neutral-50 focus:ring-3 focus:ring-rose-300 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-rose-600 dark:ring-offset-neutral-800"
-                      required=""
-                      onClick={() => setAcceptTerms(prev => !prev)} />
+                      onClick={() => setAcceptTermsAndConditions(prev => !prev)}
+                      className="w-4 h-4 border border-neutral-300 rounded bg-neutral-50 focus:ring-3 focus:ring-rose-300 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-rose-600 dark:ring-offset-neutral-800 cursor-pointer"
+
+                    />
                   </div>
                   <div
                     className="ml-3 text-sm">
@@ -109,12 +205,19 @@ const SignUp = () => {
                     </label>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  className={`w-full text-white bg-rose-600 hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-800 cursor-pointer ${acceptTerms ? '' : 'cursor-not-allowed bg-red-300'}`}
-                  disabled={!acceptTerms}>
-                  Crear cuenta
-                </button>
+                <div className='flex justify-center items-center'>
+                  {isCreatingUser || isSigningUser || isUserLoading
+                    ? <Loader />
+                    : <motion.button
+                      type="submit"
+                      whileTap={{ scale: 0.9 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                      className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer ${acceptTermsAndConditions ? 'bg-rose-600  hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-300  dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-800' : 'cursor-none bg-rose-300'}`}
+                      disabled={!acceptTermsAndConditions}>
+                      Crear cuenta
+                    </motion.button>
+                  }
+                </div>
                 <p
                   className="text-sm font-light text-neutral-500 dark:text-neutral-400">
                   Ya tienes una cuenta?&nbsp;
@@ -128,9 +231,8 @@ const SignUp = () => {
             </div>
           </div>
         </div>
-      </section>
-    </PageTransitionAnimationWrapper>
-
+      </section >
+    </AnimationWrapper >
   )
 }
 
