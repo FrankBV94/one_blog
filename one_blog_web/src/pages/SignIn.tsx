@@ -9,7 +9,7 @@ import { SigninValidation } from '../utils/validations'
 import type * as z from 'zod'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { useSignInAccount } from '../utils/queries'
+import { useSignInAccount } from '../queries/queries'
 import { useUserContext } from '../context/AuthContext'
 import Loader from '../common/Loader'
 
