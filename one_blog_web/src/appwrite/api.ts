@@ -21,7 +21,7 @@ export async function createUserAccount(user: NewUser) {
       name: newAccount.name,
       email: newAccount.email,
       username: user.username,
-      image_url: avatarUrl
+      avatarUrl
     })
 
     return newUser
@@ -34,10 +34,10 @@ export async function createUserAccount(user: NewUser) {
 /** SAVE USER TO DB */
 export async function saveUserToDB(user: {
   accountId: string
-  email: string
   name: string
-  image_url: URL
+  email: string
   username: string
+  avatarUrl: URL
 }) {
   try {
     const newUser = await databases.createDocument(
