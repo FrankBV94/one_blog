@@ -1,13 +1,18 @@
 import Black_Logo from '../assets/imgs/logo_white.png'
 import White_Logo from '../assets/imgs/logo_dark.png'
-import { Link, Outlet } from 'react-router-dom'
-import { TbSearch, TbBellFilled, TbBallpenFilled, TbUserFilled, TbSettingsFilled, TbLogout2, TbMoonStars, TbSun } from 'react-icons/tb'
+import { Link, useNavigate } from 'react-router-dom'
+import { TbSearch, TbBellFilled, TbBallpenFilled, TbUserFilled, TbSettingsFilled, TbLogout2, TbMoonStars, TbSun, TbAppsFilled } from 'react-icons/tb'
 import { useThemeStore } from '../store/theme'
-import { useClick, useFloating, useInteractions, useDismiss, offset } from '@floating-ui/react'
-import { useState } from 'react'
+import { useClick, useFloating, useInteractions, useDismiss, shift } from '@floating-ui/react'
+import { useEffect, useState } from 'react'
 import AnimationWrapper from '../common/AnimationWrapper'
+import { useUserContext } from '../context/AuthContext'
+import { useSignOutAccount } from '../queries/queries'
 
 const Navbar = () => {
+  const navigate = useNavigate()
+  const { user } = useUserContext()
+  const { mutate: signOut, isSuccess } = useSignOutAccount()
   /** Theme Controller */
   const { theme, toggleTheme } = useThemeStore()
   /** User Menu Controller */
@@ -17,7 +22,7 @@ const Navbar = () => {
     floatingStyles: MenuFloatingStyles,
     context: MenuContext
   } = useFloating({
-    placement: 'bottom-end',
+    middleware: [shift()],
     open: isOpenMenu,
     onOpenChange: setIsOpenMenu
   })
@@ -37,10 +42,7 @@ const Navbar = () => {
     floatingStyles: NotificationsFloatingStyles,
     context: NotificationsContext
   } = useFloating({
-    middleware: [offset({
-      crossAxis: -50
-    })],
-    strategy: 'fixed',
+    middleware: [shift()],
     open: isOpenNotifications,
     onOpenChange: setIsOpenNotifications
   })
@@ -61,7 +63,6 @@ const Navbar = () => {
     floatingStyles: SearchFloatingStyles,
     context: SearchContext
   } = useFloating({
-    placement: 'bottom-end',
     open: isOpenSearch,
     onOpenChange: setIsOpenSearch
   })
@@ -75,17 +76,21 @@ const Navbar = () => {
     searchDismiss
   ])
 
+  useEffect(() => {
+    if (isSuccess) navigate(0)
+  }, [isSuccess])
+
   return (
     <header className="antialiased">
-      <nav className="bg-white border-neutral-200 px-4 lg:px-10 py-2.5 dark:bg-neutral-800">
-        <div className="flex flex-wrap justify-between items-center">
+      <nav className="bg-white border-neutral-200 px-4 lg:px-6 py-2.5 dark:bg-neutral-800">
+        <div className="flex flex-wrap justify-around items-center">
           <div className="flex justify-start items-center">
             <Link to="home" className="flex mr-4">
               <img src={theme === 'dark' ? White_Logo : Black_Logo} className="mr-3 h-8" alt="One Blog Logo" />
             </Link>
             <form action="#" method="GET" className="hidden lg:block lg:pl-2">
               <label htmlFor="topbar-search" className="sr-only">Buscar</label>
-              <div className="relative mt-1 lg:w-96">
+              <div className="relative mt-1">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <TbSearch className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
                 </div>
@@ -104,12 +109,12 @@ const Navbar = () => {
             </Link>
             {/* Search Button */}
             <button
-              id="toggleSidebarMobileSearch"
+              id="toggleMobileSearch"
               type="button"
               className="p-2 text-neutral-500 rounded-lg lg:hidden hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-white"
               ref={SearchRefs.setReference} {...SearchGetReferenceProps()}>
               <span className="sr-only">Buscar</span>
-              {/* <!-- Search icon --> */}
+              {/* Search Icon */}
               <TbSearch className="w-4 h-4" />
             </button>
             {/* Search Dropdown */}
@@ -120,7 +125,7 @@ const Navbar = () => {
                   style={SearchFloatingStyles}
                   {...SearchGetFloatingProps()}
                 >
-                  <div className="overflow-hidden z-50 my-4 w-64 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="notification-dropdown">
+                  <div className="overflow-hidden z-50 my-4 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="search-dropdown">
                     <form action="#" method="GET" className="lg:block lg:pl-2">
                       <label htmlFor="topbar-search" className="sr-only">Buscar</label>
                       <div className="relative mt-1 lg:w-96">
@@ -145,10 +150,10 @@ const Navbar = () => {
               className="p-2 mr-1 text-neutral-500 rounded-lg hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 focus:ring-4 focus:ring-neutral-300 dark:focus:ring-neutral-600"
               ref={NotificationsRefs.setReference} {...NotificationsGetReferenceProps()}>
               <span className="sr-only">Ver notificaciones</span>
-              {/* <!-- Bell icon --> */}
+              {/* Notifications Icon */}
               <TbBellFilled className="w-5 h-5" />
             </button>
-            {/* <!-- Dropdown menu --> */}
+            {/* Notifications Dropdown */}
             {isOpenNotifications && (
               <AnimationWrapper transition={{ duration: 0.2 }}>
                 <div
@@ -156,7 +161,7 @@ const Navbar = () => {
                   style={NotificationsFloatingStyles}
                   {...NotificationsGetFloatingProps()}
                 >
-                  <div className="overflow-hidden z-50 my-4 w-64 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="notification-dropdown">
+                  <div className="overflow-hidden z-50 my-4 max-w-xs text-base list-none bg-white rounded divide-y divide-neutral-100 shadow-lg dark:divide-neutral-600 dark:bg-neutral-700" id="notification-dropdown">
                     <div className="block py-2 px-4 text-base font-medium text-center text-neutral-700 bg-neutral-50 dark:bg-neutral-700 dark:text-neutral-400">
                       Notificaciones
                     </div>
@@ -184,7 +189,7 @@ const Navbar = () => {
                 </div>
               </AnimationWrapper>
             )}
-            {/* <!-- User Menu --> */}
+            {/* User Menu Button */}
             <button
               type="button"
               className="flex mx-3 text-sm bg-neutral-800 rounded-full md:mr-0 focus:ring-4 focus:ring-neutral-300 dark:focus:ring-neutral-600"
@@ -193,9 +198,9 @@ const Navbar = () => {
               data-dropdown-toggle="dropdown"
               ref={MenuRefs.setReference} {...MenuGetReferenceProps()}>
               <span className="sr-only">Abrir menú de usuario</span>
-              <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+              <img className="w-8 h-8 rounded-full" src={user.image_url} alt="user photo" />
             </button>
-            {/* <!-- Dropdown menu --> */}
+            {/* User Menu Dropdown */}
             {isOpenMenu && (
               <AnimationWrapper transition={{ duration: 0.2 }}>
                 <div
@@ -235,10 +240,18 @@ const Navbar = () => {
                       aria-labelledby="dropdown">
                       <li>
                         <Link
-                          to={`/user/${username}`}
+                          to={`/profile/${user.id}`}
                           className="flex items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
                           <TbUserFilled className="mr-2 w-4 h-4 text-neutral-400" />
                           Perfil
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to='/profile'
+                          className="flex items-center py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          <TbAppsFilled className="mr-2 w-4 h-4 text-neutral-400" />
+                          Panel de control
                         </Link>
                       </li>
                       <li>
@@ -255,7 +268,8 @@ const Navbar = () => {
                       aria-labelledby="dropdown">
                       <li>
                         <button
-                          className="flex items-center w-full py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white">
+                          className="flex items-center w-full py-2 px-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-600 dark:hover:text-white"
+                          onClick={() => signOut()}>
                           <TbLogout2 className="mr-2 w-4 h-4 text-neutral-400" />
                           Salir
                         </button>
