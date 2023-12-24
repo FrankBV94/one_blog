@@ -5,31 +5,14 @@ export interface Inputs {
   username: string
 }
 
-export interface IUpdateUser {
-  userId: string
-  name: string
-  bio: string
-  imageId: string
-  imageUrl: URL | string
-  file: File[]
-}
-
-export interface INewPost {
-  userId: string
-  caption: string
-  file: File[]
-  location?: string
+export interface Post {
+  title: string
+  banner: File[]
+  des: string
+  content: []
   tags?: string
-}
-
-export interface IUpdatePost {
-  postId: string
-  caption: string
-  imageId: string
-  imageUrl: URL
-  file: File[]
-  location?: string
-  tags?: string
+  draft?: boolean
+  author: string
 }
 
 export interface User {
