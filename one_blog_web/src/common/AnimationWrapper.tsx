@@ -7,8 +7,7 @@ const AnimationWrapper =
     keyValue,
     initial = { opacity: 0 },
     animate = { opacity: 1 },
-    transition = { duration: 0.5 },
-    className
+    transition = { duration: 0.5 }
   }) => {
     return (
       <AnimatePresence>
@@ -29,8 +28,7 @@ AnimationWrapper.propTypes = {
   keyValue: PropTypes.string,
   initial: PropTypes.object,
   animate: PropTypes.object,
-  transition: PropTypes.object,
-  className: PropTypes.string
+  transition: PropTypes.object
 }
 
 export default AnimationWrapper
