@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn'
 import Welcome from './pages/Welcome'
 import Layout from './components/Layout'
 import Home from './pages/Home'
+import Editor from './pages/Editor'
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <Route path='/signup' element={<SignUp />} />
       <Route element={<Layout />}>
         <Route path='/home' element={<Home />} />
+        <Route path='/editor' element={<Editor />} />
       </Route>
     </Routes>
   )
