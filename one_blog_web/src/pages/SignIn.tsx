@@ -28,8 +28,9 @@ const SignIn = () => {
     try {
       const session = await signInAccount(user)
 
-      if (session?.$id === null) {
-        toast.error('Error de inicio de sesion. Inténtalo de nuevo.')
+      console.log(session)
+      if (typeof session === 'undefined') {
+        toast.error('No existe la cuenta. Por favor, cree una cuenta.')
         return
       }
 
