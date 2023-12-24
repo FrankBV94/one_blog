@@ -198,7 +198,20 @@ const Navbar = () => {
               data-dropdown-toggle="dropdown"
               ref={MenuRefs.setReference} {...MenuGetReferenceProps()}>
               <span className="sr-only">Abrir menú de usuario</span>
-              <img className="w-8 h-8 rounded-full" src={user.image_url} alt="user photo" />
+              {user.avatarUrl
+                ? (<img className="w-8 h-8 rounded-full" src={user.avatarUrl || '/assets/icons/profile-placeholder.svg'} alt="user photo" />)
+                : (<div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                  <span className="font-medium text-gray-600 dark:text-gray-300">
+                    {user.name
+                      .split(/\s/)
+                      .reduce(
+                        (response, word) => (response += word.slice(0, 1)),
+                        ''
+                      )}
+                  </span>
+                </div>)
+              }
+
             </button>
             {/* User Menu Dropdown */}
             {isOpenMenu && (
