@@ -93,7 +93,7 @@ const SignIn = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.email != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                   </div>
                   <p className="mt-2 text-sm text-red-600 dark:text-red-500">
                     {errors.email?.message}
@@ -115,7 +115,7 @@ const SignIn = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.password != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                     {passwordVisible
                       ? (<TbEye className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
                       : (<TbEyeOff className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
@@ -132,7 +132,7 @@ const SignIn = () => {
                       type="submit"
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                      className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer bg-rose-600  hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-300  dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-800">
+                      className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer bg-sky-600  hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300  dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800">
                       Crear cuenta
                     </motion.button>
                   }
@@ -142,7 +142,7 @@ const SignIn = () => {
                   No tienes cuenta?&nbsp;
                   <Link
                     to="/signup"
-                    className="font-medium text-rose-600 hover:underline dark:text-rose-500">
+                    className="font-medium text-sky-600 hover:underline dark:text-sky-500">
                     Crear cuenta
                   </Link>
                 </p>

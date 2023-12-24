@@ -98,12 +98,12 @@ const Navbar = () => {
                   type="text"
                   name="email"
                   id="topbar-search"
-                  className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar" />
+                  className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500" placeholder="Buscar" />
               </div>
             </form>
           </div>
           <div className="flex items-center lg:order-2">
-            <Link to="/editor" className="hidden sm:inline-flex items-center justify-center text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none dark:focus:ring-rose-800">
+            <Link to="/editor" className="hidden sm:inline-flex items-center justify-center text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-sky-600 dark:hover:bg-sky-700 focus:outline-none dark:focus:ring-sky-800">
               <TbBallpenFilled className="mr-1 -ml-1 w-5 h-5" />
               Escribir
             </Link>
@@ -136,7 +136,7 @@ const Navbar = () => {
                           type="text"
                           name="email"
                           id="topbar-search"
-                          className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-rose-500 focus:border-rose-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500" placeholder="Buscar" />
+                          className="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full pl-9 p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500" placeholder="Buscar" />
                       </div>
                     </form>
                   </div>
@@ -175,7 +175,7 @@ const Navbar = () => {
                         </div>
                         <div className="pl-3 w-full">
                           <div className="text-neutral-500 font-normal text-sm mb-1.5 dark:text-neutral-400"><span className="font-semibold text-neutral-900 dark:text-white">Jese leos</span> and <span className="font-medium text-neutral-900 dark:text-white">5 others</span> started following you.</div>
-                          <div className="text-xs font-medium text-rose-700 dark:text-rose-400">10 minutes ago</div>
+                          <div className="text-xs font-medium text-sky-700 dark:text-sky-400">10 minutes ago</div>
                         </div>
                       </Link>
                     </div>

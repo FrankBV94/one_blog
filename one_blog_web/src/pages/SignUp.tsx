@@ -103,7 +103,7 @@ const SignUp = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.name != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                   </div>
                   <p className="mt-2 text-sm text-red-600 dark:text-red-500">
                     {errors.name?.message}
@@ -125,7 +125,7 @@ const SignUp = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.username != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                   </div>
                   <p className="mt-2 text-sm text-red-600 dark:text-red-500">
                     {errors.username?.message}
@@ -147,7 +147,7 @@ const SignUp = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.email != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                   </div>
                   <p className="mt-2 text-sm text-red-600 dark:text-red-500">
                     {errors.email?.message}
@@ -169,7 +169,7 @@ const SignUp = () => {
                       className={`border  sm:text-sm rounded-lg block w-full p-2.5 
                       ${(errors.password != null)
                           ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 dark:bg-neutral-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-rose-600 focus:border-rose-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-rose-500 dark:focus:border-rose-500'}`} />
+                          : 'bg-neutral-50  border-neutral-300 text-neutral-900 dark:bg-neutral-700 focus:ring-sky-600 focus:border-sky-600 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500'}`} />
                     {passwordVisible
                       ? (<TbEye className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
                       : (<TbEyeOff className='absolute end-2.5 bottom-2.5 text-neutral-900 h-6 w-6 cursor-pointer' onClick={() => { togglePasswordVisibility() }} />)
@@ -188,7 +188,7 @@ const SignUp = () => {
                       aria-describedby="terms"
                       type="checkbox"
                       onClick={() => setAcceptTermsAndConditions(prev => !prev)}
-                      className="w-4 h-4 border border-neutral-300 rounded bg-neutral-50 focus:ring-3 focus:ring-rose-300 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-rose-600 dark:ring-offset-neutral-800 cursor-pointer"
+                      className="w-4 h-4 border border-neutral-300 rounded bg-neutral-50 focus:ring-3 focus:ring-sky-300 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-sky-600 dark:ring-offset-neutral-800 cursor-pointer"
 
                     />
                   </div>
@@ -199,7 +199,7 @@ const SignUp = () => {
                       className="font-light text-neutral-500 dark:text-neutral-300">
                       Accepto los&nbsp;
                       <a
-                        className="font-medium text-rose-600 hover:underline dark:text-rose-500" href="#">
+                        className="font-medium text-sky-600 hover:underline dark:text-sky-500" href="#">
                         Términos y condiciones
                       </a>
                     </label>
@@ -212,7 +212,7 @@ const SignUp = () => {
                       type="submit"
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                      className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer ${acceptTermsAndConditions ? 'bg-rose-600  hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-300  dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-800' : 'cursor-none bg-rose-300'}`}
+                      className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer ${acceptTermsAndConditions ? 'bg-sky-600  hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300  dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800' : 'cursor-none bg-sky-300'}`}
                       disabled={!acceptTermsAndConditions}>
                       Crear cuenta
                     </motion.button>
@@ -223,7 +223,7 @@ const SignUp = () => {
                   Ya tienes una cuenta?&nbsp;
                   <Link
                     to="/signin"
-                    className="font-medium text-rose-600 hover:underline dark:text-rose-500">
+                    className="font-medium text-sky-600 hover:underline dark:text-sky-500">
                     Entre aquí
                   </Link>
                 </p>
